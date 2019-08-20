@@ -10,7 +10,7 @@ type TRect = {
     height: number;
 }
 
-export type TPagemapOptions = {
+type TPagemapOptions = {
     viewport?: HTMLElement | null,
     styles?: {
         [k: string]: string;
@@ -21,7 +21,7 @@ export type TPagemapOptions = {
     interval?: number | null;
 }
 
-export class Pagemap {
+class Pagemap {
     private _ctx: CanvasRenderingContext2D;
     private _appliedOptions: TPagemapOptions;
 
@@ -278,7 +278,9 @@ export class Pagemap {
         document.body.style.cursor = 'auto';
 
         window.removeEventListener('mousemove', this._on_drag);
+
         window.removeEventListener('mouseup', this._on_drag_end);
+        this._canvas.removeEventListener('mouseup', this._on_drag_end);
 
         this._on_drag(event);
     };
@@ -309,7 +311,9 @@ export class Pagemap {
         document.body.style.cursor = 'crosshair';
 
         window.addEventListener('mousemove', this._on_drag);
+
         window.addEventListener('mouseup', this._on_drag_end);
+        this._canvas.addEventListener('mouseup', this._on_drag_end);
 
         this._on_drag(event);
     };
@@ -317,7 +321,7 @@ export class Pagemap {
     private _init() {
         this._canvas.style.cursor = 'pointer';
 
-        this._canvas.addEventListener('mousemove', this._on_drag_start);
+        this._canvas.addEventListener('mousedown', this._on_drag_start);
 
         const targetNode = this._appliedOptions.viewport || window;
 
@@ -349,7 +353,7 @@ export class Pagemap {
         const pm = document.createElement('canvas');
 
         pm.style.position = 'sticky';
-        pm.style.width = '200px';
+        pm.style.width = '100px';
         pm.style.bottom = '20px';
         pm.style.left = '20px';
         pm.style.height = '200px';
